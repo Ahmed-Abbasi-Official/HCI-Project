@@ -1,205 +1,306 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Polyline Editor Pro</title>
-    <link rel="stylesheet" href="css/editor.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Polyline Editor Pro</title>
+<link rel="stylesheet" href="css/editor.css"/>
 </head>
-<body>
+<body data-theme="dark">
 
-<div id="dragGhost">Shape</div>
+<div id="dragGhost">⬡ Shape</div>
+
+<!-- REPLAY OVERLAY -->
+<div id="replayOverlay" class="replay-overlay">
+  <div class="replay-box">
+    <div class="replay-title" id="replayTitle">▶ Replaying Shape 1</div>
+    <div class="replay-track">
+      <div class="replay-bar-bg">
+        <div class="replay-bar-fill" id="replayBarFill"></div>
+      </div>
+      <span class="replay-counter" id="replayCounter">0 / 0</span>
+    </div>
+    <div class="replay-controls">
+      <button class="rp-btn" id="rpPrev" title="Previous">⏮</button>
+      <button class="rp-btn rp-main" id="rpPlayPause" title="Play/Pause">▶</button>
+      <button class="rp-btn" id="rpNext" title="Next">⏭</button>
+      <select class="rp-speed" id="rpSpeed">
+        <option value="800">0.5×</option>
+        <option value="500" selected>1×</option>
+        <option value="250">2×</option>
+        <option value="100">4×</option>
+      </select>
+      <button class="rp-btn rp-close" id="rpClose" title="Close">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDE MODAL -->
+<div id="guideModal" class="guide-modal">
+  <div class="guide-content">
+    <div class="guide-header">
+      <div class="guide-header-left">
+        <div class="guide-gem"></div>
+        <h2>Polyline Editor — Help Guide</h2>
+      </div>
+      <button id="guideCloseBtn" class="guide-close" type="button">✕</button>
+    </div>
+    <div class="guide-body">
+
+      <div class="guide-cards">
+
+        <div class="guide-card">
+          <div class="gc-icon">✦</div>
+          <div class="gc-content">
+            <h3>Drawing</h3>
+            <p>Press <kbd>B</kbd> or click Draw mode. Click canvas to place points. Dotted preview line follows cursor. Press <kbd>ESC</kbd> to finish.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">✥</div>
+          <div class="gc-content">
+            <h3>Move Mode</h3>
+            <p>Press <kbd>M</kbd>. Click a shape or point and drag. Press+hold to see previous state preview. Arrow keys nudge selected shape.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">✕</div>
+          <div class="gc-content">
+            <h3>Delete Mode</h3>
+            <p>Press <kbd>D</kbd>. Click a point to remove it. Click a line segment to delete entire shape.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">⬡</div>
+          <div class="gc-content">
+            <h3>Shapes</h3>
+            <p>Click sidebar shape to add at center. Drag shape onto canvas to place at exact position. Size slider controls dimensions.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">▶</div>
+          <div class="gc-content">
+            <h3>Shape Replay</h3>
+            <p>Select a shape → click <strong>▶ Replay</strong> in the selection bar. Watch that shape redraw step by step. Other shapes stay visible.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">⊞</div>
+          <div class="gc-content">
+            <h3>Snap & Grid</h3>
+            <p>Press <kbd>G</kbd> to toggle grid snap. Points snap to 20px grid intersections. Press <kbd>S</kbd> to toggle point-to-point snap.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">📐</div>
+          <div class="gc-content">
+            <h3>Measurements</h3>
+            <p>Segment lengths shown on canvas. Select a closed shape to see Area and Perimeter in the info panel below selection bar.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">🖊</div>
+          <div class="gc-content">
+            <h3>Shape Recognition</h3>
+            <p>Draw freehand → select it → click <strong>Recognize</strong> in selection bar. System converts rough drawing to clean geometric shape.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">💾</div>
+          <div class="gc-content">
+            <h3>Export</h3>
+            <p>File → Export PNG to download canvas as image. File → Save downloads JSON. Data auto-saves to browser storage.</p>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="gc-icon">⌨</div>
+          <div class="gc-content">
+            <h3>Shortcuts</h3>
+            <p>
+              <kbd>B</kbd> Draw &nbsp; <kbd>M</kbd> Move &nbsp; <kbd>D</kbd> Delete &nbsp; <kbd>ESC</kbd> Idle<br>
+              <kbd>G</kbd> Grid Snap &nbsp; <kbd>S</kbd> Point Snap<br>
+              <kbd>Ctrl+Z</kbd> Undo &nbsp; <kbd>Ctrl+Y</kbd> Redo<br>
+              <kbd>Ctrl+C</kbd> Copy &nbsp; <kbd>Ctrl+V</kbd> Paste &nbsp; <kbd>Ctrl+X</kbd> Cut<br>
+              <kbd>Ctrl+D</kbd> Duplicate &nbsp; <kbd>Del</kbd> Delete<br>
+              <kbd>↑↓←→</kbd> Nudge &nbsp; <kbd>Scroll</kbd> Zoom
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="app">
 
+  <!-- TOP BAR -->
   <div class="top-shell">
     <div class="menu-bar">
       <div class="logo-wrap">
         <div class="logo-gem"></div>
-        <span class="logo-text">POLYLINE-ED</span>
+        <span class="logo-text">POLY<span class="logo-accent">LINE</span></span>
       </div>
       <div id="menuButtons"></div>
-      <button id="guideBtn" class="guide-btn" type="button" aria-label="Show Guide" title="Show Guide">📖 Guide</button>
-      <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Switch theme" title="Switch theme">
-        <span id="themeToggleIcon" aria-hidden="true">☀</span>
-      </button>
+      <div class="top-bar-right">
+        <button id="clearCanvasBtn" class="topbar-action-btn danger-btn" type="button" title="Clear all shapes">🗑 Clear</button>
+        <button id="exportPngBtn" class="topbar-action-btn" type="button" title="Export as PNG">⬇ PNG</button>
+        <button id="guideBtn" class="topbar-action-btn guide-trigger" type="button">📖 Guide</button>
+        <button id="themeToggleBtn" class="theme-pill" type="button">
+          <span id="themeIcon">☀</span>
+        </button>
+      </div>
     </div>
-    <div class="top-status" id="topStatus">Ready - Drag shapes to canvas | B=Draw | M=Move | D=Delete</div>
+    <div class="top-status" id="topStatus">Ready — Drag shapes onto canvas · B=Draw · M=Move · D=Delete · G=Grid Snap</div>
   </div>
 
   <div class="workspace">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
 
-      <div class="sidebar-section" style="flex:1;overflow-y:auto">
-        <div class="section-label">Shapes - click or drag down</div>
-        <div class="shape-list" id="shapeList">
-          <button class="shape-btn" data-shape="rectangle" draggable="true"><canvas class="shape-icon-canvas" id="ic-rect"></canvas>Rectangle<span class="shape-color-dot" style="background:#6c8fff"></span></button>
-          <button class="shape-btn" data-shape="diamond" draggable="true"><canvas class="shape-icon-canvas" id="ic-diamond"></canvas>Diamond<span class="shape-color-dot" style="background:#a78bfa"></span></button>
-          <button class="shape-btn" data-shape="ellipse" draggable="true"><canvas class="shape-icon-canvas" id="ic-ellipse"></canvas>Ellipse<span class="shape-color-dot" style="background:#6bcb77"></span></button>
-          <button class="shape-btn" data-shape="circle" draggable="true"><canvas class="shape-icon-canvas" id="ic-circle"></canvas>Circle<span class="shape-color-dot" style="background:#ffd93d"></span></button>
-          <button class="shape-btn" data-shape="arrow" draggable="true"><canvas class="shape-icon-canvas" id="ic-arrow"></canvas>Arrow<span class="shape-color-dot" style="background:#ff6b6b"></span></button>
-          <button class="shape-btn" data-shape="freehand" draggable="false"><canvas class="shape-icon-canvas" id="ic-free"></canvas>Freehand Pencil<span class="shape-color-dot" style="background:#fb923c"></span></button>
+      <!-- Snap Controls -->
+      <div class="sidebar-section">
+        <div class="section-label">Snap & Grid</div>
+        <div class="snap-row">
+          <button class="snap-btn active" id="snapGridBtn" data-snap="grid" title="Toggle grid snap (G)">
+            <span>⊞</span> Grid Snap
+          </button>
+          <button class="snap-btn" id="snapPtBtn" data-snap="point" title="Toggle point snap (S)">
+            <span>⊙</span> Pt Snap
+          </button>
         </div>
       </div>
 
+      <!-- Color -->
       <div class="sidebar-section">
         <div class="section-label">Stroke Color</div>
         <div class="color-row" id="colorRow"></div>
       </div>
 
+      <!-- Shape Controls -->
       <div class="sidebar-section">
         <div class="section-label">Shape Controls</div>
         <div class="slider-row">
           <span class="slider-label">Size</span>
-          <input type="range" class="slider-input" id="sizeSlider" min="20" max="300" value="100" />
+          <input type="range" class="slider-input" id="sizeSlider" min="20" max="300" value="100"/>
           <span class="slider-val" id="sizeVal">100</span>
         </div>
         <div class="slider-row">
           <span class="slider-label">Line</span>
-          <input type="range" class="slider-input" id="lineSlider" min="1" max="12" value="2" />
+          <input type="range" class="slider-input" id="lineSlider" min="1" max="12" value="2"/>
           <span class="slider-val" id="lineVal">2px</span>
         </div>
       </div>
 
+      <!-- Shapes -->
+      <div class="sidebar-section" style="flex:1;overflow-y:auto">
+        <div class="section-label">Shape Library — drag ↓</div>
+        <div class="shape-list" id="shapeList">
+          <button class="shape-btn" data-shape="rectangle" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-rect"></canvas>Rectangle
+            <span class="shape-color-dot" style="background:#6c8fff"></span>
+          </button>
+          <button class="shape-btn" data-shape="diamond" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-diamond"></canvas>Diamond
+            <span class="shape-color-dot" style="background:#a78bfa"></span>
+          </button>
+          <button class="shape-btn" data-shape="ellipse" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-ellipse"></canvas>Ellipse
+            <span class="shape-color-dot" style="background:#6bcb77"></span>
+          </button>
+          <button class="shape-btn" data-shape="circle" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-circle"></canvas>Circle
+            <span class="shape-color-dot" style="background:#ffd93d"></span>
+          </button>
+          <button class="shape-btn" data-shape="arrow" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-arrow"></canvas>Arrow
+            <span class="shape-color-dot" style="background:#ff6b6b"></span>
+          </button>
+          <button class="shape-btn" data-shape="freehand" draggable="false">
+            <canvas class="shape-icon-canvas" id="ic-free"></canvas>Freehand ✏
+            <span class="shape-color-dot" style="background:#fb923c"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modes -->
       <div class="sidebar-section">
         <div class="section-label">Modes</div>
         <div class="mode-grid">
-          <button class="mode-key-btn active" data-mode="IDLE"><span class="key-icon">I</span><span>Idle</span><span class="key-badge">ESC</span></button>
-          <button class="mode-key-btn" data-mode="ADDING"><span class="key-icon">A</span><span>Draw</span><span class="key-badge">B</span></button>
-          <button class="mode-key-btn" data-mode="MOVE"><span class="key-icon">M</span><span>Move</span><span class="key-badge">M</span></button>
-          <button class="mode-key-btn" data-mode="DELETE"><span class="key-icon">D</span><span>Delete</span><span class="key-badge">D</span></button>
+          <button class="mode-key-btn active" data-mode="IDLE">
+            <span class="key-icon">⬡</span><span>Idle</span><span class="key-badge">ESC</span>
+          </button>
+          <button class="mode-key-btn" data-mode="ADDING">
+            <span class="key-icon">✦</span><span>Draw</span><span class="key-badge">B</span>
+          </button>
+          <button class="mode-key-btn" data-mode="MOVE">
+            <span class="key-icon">✥</span><span>Move</span><span class="key-badge">M</span>
+          </button>
+          <button class="mode-key-btn" data-mode="DELETE">
+            <span class="key-icon">✕</span><span>Delete</span><span class="key-badge">D</span>
+          </button>
         </div>
       </div>
 
     </aside>
 
+    <!-- CANVAS AREA -->
     <section class="canvas-wrap" id="canvasWrap">
       <canvas id="editorCanvas"></canvas>
+
+      <div class="mode-badge" id="modeBadge">IDLE</div>
       <div class="notify" id="notify"></div>
 
-      <div class="kb-hint">
+      <!-- Keyboard hint -->
+      <div class="kb-hint" id="kbHint">
         <span>Ctrl+C</span> Copy &nbsp;<span>Ctrl+V</span> Paste<br>
         <span>Ctrl+X</span> Cut &nbsp;&nbsp;<span>Ctrl+D</span> Dupe<br>
-        <span>Del</span> Delete &nbsp;<span>Arrows</span> Nudge<br>
+        <span>Del</span> Delete &nbsp;<span>↑↓←→</span> Nudge<br>
+        <span>G</span> Grid &nbsp;&nbsp;<span>S</span> Pt Snap<br>
         <span>Scroll</span> Zoom
       </div>
 
+      <!-- Selection bar -->
       <div class="sel-bar" id="selBar">
-        <span id="selText">Poly 1</span>
-        <span class="sel-btn sel-copy" id="selCopyBtn" title="Copy Ctrl+C">COPY</span>
-        <span class="sel-btn sel-dup"  id="selDupBtn"  title="Duplicate Ctrl+D">DUP</span>
-        <span class="sel-btn sel-del"  id="selDelBtn"  title="Delete Del">DEL</span>
+        <span id="selText">Shape 1</span>
+        <button class="sel-btn sel-copy" id="selCopyBtn" title="Copy (Ctrl+C)">⎘ Copy</button>
+        <button class="sel-btn sel-dup"  id="selDupBtn"  title="Duplicate (Ctrl+D)">⧉ Dup</button>
+        <button class="sel-btn sel-recog" id="selRecogBtn" title="Recognize shape">🖊 Recognize</button>
+        <button class="sel-btn sel-replay" id="selReplayBtn" title="Replay drawing history">▶ Replay</button>
+        <button class="sel-btn sel-del"  id="selDelBtn"  title="Delete (Del)">🗑 Del</button>
       </div>
+
+      <!-- Measurement panel -->
+      <div class="measure-panel" id="measurePanel">
+        <span id="measureText"></span>
+      </div>
+
     </section>
 
   </div>
 
+  <!-- STATUS BAR -->
   <footer class="status-bar">
     <div class="status-cell" id="stMode">Mode: <span>IDLE</span></div>
     <div class="status-cell" id="stShapes">Shapes: <span>0</span></div>
     <div class="status-cell" id="stPoints">Points: <span>0</span></div>
     <div class="status-cell" id="stZoom">Zoom: <span>100%</span></div>
-    <div class="status-cell" id="stSize">Size: <span>100</span></div>
+    <div class="status-cell" id="stSnap">Snap: <span>Grid</span></div>
     <div class="status-cell" id="stCoords" style="margin-left:auto">X: <span>0</span> Y: <span>0</span></div>
   </footer>
 
 </div>
 
-<div id="guideModal" class="guide-modal">
-  <div class="guide-content">
-    <div class="guide-header">
-      <h2>📖 POLYLINE EDITOR - Guide</h2>
-      <button id="guideCloseBtn" class="guide-close" type="button" aria-label="Close guide">✕</button>
-    </div>
-    <div class="guide-body">
-      <div class="guide-section">
-        <h3>🎨 Shapes</h3>
-        <p><strong>Click</strong> to draw at current position, <strong>Drag</strong> to canvas to place</p>
-        <ul>
-          <li><strong>Rectangle</strong> - 4-sided shape with right angles</li>
-          <li><strong>Diamond</strong> - 4-sided rotated square shape</li>
-          <li><strong>Ellipse</strong> - Oval shape with customizable width/height</li>
-          <li><strong>Circle</strong> - Perfect round shape</li>
-          <li><strong>Arrow</strong> - Directional pointer shape</li>
-          <li><strong>Freehand Pencil</strong> - Draw custom polylines freely</li>
-        </ul>
-      </div>
-
-      <div class="guide-section">
-        <h3>🎯 Modes</h3>
-        <ul>
-          <li><strong>Idle (ESC)</strong> - Default mode, no drawing or editing</li>
-          <li><strong>Draw (B)</strong> - Click canvas to add points, create shapes</li>
-          <li><strong>Move (M)</strong> - Click & drag shapes to move them around</li>
-          <li><strong>Delete (D)</strong> - Click to delete, or drag area to select & delete multiple</li>
-        </ul>
-      </div>
-
-      <div class="guide-section">
-        <h3>👆 Press, Hold, Release</h3>
-        <ul>
-          <li><strong>Press and hold a shape</strong> - Shows a temporary preview of the shape's previous state</li>
-          <li><strong>Keep holding</strong> - The previous saved state stays visible while the mouse is held down</li>
-          <li><strong>Release</strong> - The shape returns to its current state immediately</li>
-          <li><strong>Hold, then drag in Move mode</strong> - The preview hides and normal moving begins</li>
-        </ul>
-      </div>
-
-      <div class="guide-section">
-        <h3>⌨️ Keyboard Shortcuts</h3>
-        <ul>
-          <li><strong>B</strong> - Switch to Draw mode</li>
-          <li><strong>M</strong> - Switch to Move mode</li>
-          <li><strong>D</strong> - Switch to Delete mode</li>
-          <li><strong>ESC</strong> - Return to Idle mode</li>
-          <li><strong>Ctrl+Z</strong> - Undo last action</li>
-          <li><strong>Ctrl+Y</strong> - Redo action</li>
-          <li><strong>Ctrl+C</strong> - Copy selected shape</li>
-          <li><strong>Ctrl+V</strong> - Paste copied shape</li>
-          <li><strong>Ctrl+X</strong> - Cut selected shape</li>
-          <li><strong>Ctrl+D</strong> - Duplicate selected shape</li>
-          <li><strong>Del</strong> - Delete selected shape</li>
-          <li><strong>Arrow Keys</strong> - Nudge selected shape</li>
-          <li><strong>Scroll</strong> - Zoom in/out</li>
-        </ul>
-      </div>
-
-      <div class="guide-section">
-        <h3>🎨 Style Controls</h3>
-        <ul>
-          <li><strong>Stroke Color</strong> - Choose color for shape outlines (click color buttons)</li>
-          <li><strong>Size</strong> - Adjust shape dimensions (20-300px)</li>
-          <li><strong>Line Width</strong> - Adjust stroke thickness (1-12px)</li>
-        </ul>
-      </div>
-
-      <div class="guide-section">
-        <h3>💾 Save & Load</h3>
-        <ul>
-          <li><strong>Ctrl+S</strong> - Save drawing to browser storage</li>
-          <li><strong>Auto-Save</strong> - Drawing automatically saves every action</li>
-        </ul>
-      </div>
-
-      <div class="guide-section">
-        <h3>🌓 Theme</h3>
-        <p>Click the <strong>☀</strong> icon in top-right to switch between Light and Dark themes</p>
-      </div>
-
-      <div class="guide-section">
-        <h3>📍 Selection Bar</h3>
-        <p>When a shape is selected, use these buttons:</p>
-        <ul>
-          <li><strong>COPY</strong> - Copy the selected shape</li>
-          <li><strong>DUP</strong> - Duplicate the selected shape</li>
-          <li><strong>DEL</strong> - Delete the selected shape</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <script type="module" src="js/editor.js"></script>
+<script type="module" src="js/editor.js"></script>
 </body>
 </html>
