@@ -24,6 +24,8 @@
   let curColor = COLORS[0], curSize = 100, curLW = 2;
   let zoom = 1, panX = 0, panY = 0;
   let isDrag = false, dragChg = false, mdown = false;
+  let isPanning = false;
+  let panLast = { x: 0, y: 0 };
   let lastDW = { x: 0, y: 0 };
   let freeActive = false;
   let autoSave = true, isComp = false, beforeSnap = null;
@@ -200,6 +202,7 @@
   // ═══════════════════════════════════════
   function render() {
     resz();
+    syncGridOverlay();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -219,6 +222,14 @@
 
     ctx.restore();
     updUI();
+  }
+
+  function syncGridOverlay() {
+    const spacing = Math.max(2, GRID * zoom);
+    const mod = (v, n) => ((v % n) + n) % n;
+    wrap.style.setProperty("--grid-size", `${spacing}px`);
+    wrap.style.setProperty("--grid-offset-x", `${mod(panX, spacing)}px`);
+    wrap.style.setProperty("--grid-offset-y", `${mod(panY, spacing)}px`);
   }
 
   function drawAll() {
@@ -374,6 +385,16 @@
   // ═══════════════════════════════════════
   function setupMouse() {
     canvas.addEventListener("mousemove", e => {
+      if (isPanning) {
+        const dx = e.clientX - panLast.x;
+        const dy = e.clientY - panLast.y;
+        panX += dx;
+        panY += dy;
+        panLast = { x: e.clientX, y: e.clientY };
+        render();
+        return;
+      }
+
       const w = toW(e); mw = w;
       hovPt = nearPt(w.x, w.y, 10 / zoom);
       hovPoly = hovPt ? hovPt.pi : nearLine(w.x, w.y, 7 / zoom);
@@ -401,7 +422,20 @@
     });
 
     canvas.addEventListener("mousedown", e => {
+      if (e.button !== 0) return;
       const w = toW(e); mdown = true; lastDW = w;
+
+      // Drag empty background to pan grid/view.
+      if (mode !== MODES.ADDING && mode !== MODES.DELETE) {
+        const pH = nearPt(w.x, w.y, 10 / zoom);
+        const lH = nearLine(w.x, w.y, 7 / zoom);
+        if (!pH && lH < 0) {
+          isPanning = true;
+          panLast = { x: e.clientX, y: e.clientY };
+          canvas.style.cursor = "grabbing";
+          return;
+        }
+      }
 
       if (mode === MODES.ADDING) {
         if (activeTool === "freehand") {
@@ -450,6 +484,14 @@
     });
 
     window.addEventListener("mouseup", () => {
+      if (isPanning) {
+        isPanning = false;
+        mdown = false;
+        updCursor();
+        render();
+        return;
+      }
+
       if (mode === MODES.ADDING && activeTool === "freehand" && freeActive) {
         freeActive = false;
         const ln = polys[drawIdx];
@@ -477,13 +519,22 @@
       render();
     });
 
-    canvas.addEventListener("mouseleave", () => { hovPt = null; stopHold(false); alignGuides = { h: null, v: null }; render(); });
+    canvas.addEventListener("mouseleave", () => {
+      if (isPanning) {
+        isPanning = false;
+        mdown = false;
+      }
+      hovPt = null;
+      stopHold(false);
+      alignGuides = { h: null, v: null };
+      updCursor();
+      render();
+    });
 
     canvas.addEventListener("wheel", e => {
       e.preventDefault();
       const f = e.deltaY < 0 ? 1.1 : 0.9;
-      const rect = canvas.getBoundingClientRect();
-      const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+      const cx = canvas.width / 2, cy = canvas.height / 2;
       const old = zoom; zoom = Math.max(0.1, Math.min(10, zoom * f));
       panX = cx - (cx - panX) * (zoom / old); panY = cy - (cy - panY) * (zoom / old);
       render();
@@ -591,7 +642,7 @@
         setMode(MODES.IDLE);
       }
 
-      // Arrow nudge
+      // Arrow nudge selected shape
       if (selPoly >= 0 && ["arrowup","arrowdown","arrowleft","arrowright"].includes(k)) {
         e.preventDefault();
         const step = e.shiftKey ? 10 : 1;
@@ -604,6 +655,19 @@
         if (!ln._history) ln._history = [];
         ln._history.push(ln.points.map(p => [...p]));
         ac();
+        return;
+      }
+
+      // Arrow pan view/grid when nothing is selected
+      if (selPoly < 0 && ["arrowup","arrowdown","arrowleft","arrowright"].includes(k)) {
+        e.preventDefault();
+        const step = e.shiftKey ? GRID * 2 : GRID;
+        const dx = k === "arrowright" ? step : k === "arrowleft" ? -step : 0;
+        const dy = k === "arrowdown" ? step : k === "arrowup" ? -step : 0;
+        panX += dx;
+        panY += dy;
+        render();
+        return;
       }
     });
   }
@@ -861,7 +925,7 @@
     const msgs = {
       [MODES.IDLE]: "Idle — click shape to select · double-click to label · drag sidebar shapes",
       [MODES.ADDING]: "Drawing — click to add points · B=new polyline · ESC=finish",
-      [MODES.MOVE]: "Move — drag point or whole shape · hold=preview prev state · arrows=nudge",
+      [MODES.MOVE]: "Move — drag point/shape · drag empty grid to pan · arrows=nudge/pan",
       [MODES.DELETE]: "Delete — click point to remove · click line to delete shape"
     };
     if (mode !== MODES.ADDING) topSt.textContent = msgs[m] || "";

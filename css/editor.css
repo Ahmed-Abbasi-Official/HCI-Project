@@ -399,6 +399,9 @@ html, body {
   background: var(--canvas-bg);
   overflow: hidden;
   min-height: 0;
+  --grid-size: 20px;
+  --grid-offset-x: 0px;
+  --grid-offset-y: 0px;
 }
 
 /* Dot grid background */
@@ -407,7 +410,8 @@ html, body {
   position: absolute;
   inset: 0;
   background-image: radial-gradient(circle, var(--grid-col) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: var(--grid-offset-x) var(--grid-offset-y);
   pointer-events: none;
   z-index: 0;
   transition: background-image 0.3s;
