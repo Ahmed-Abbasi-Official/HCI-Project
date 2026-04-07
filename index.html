@@ -168,6 +168,37 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
+      <!-- Shapes -->
+      <div class="sidebar-section" style="flex:1;overflow-y:auto">
+        <div class="section-label">Shape Library — drag ↓</div>
+        <div class="shape-list" id="shapeList">
+          <button class="shape-btn" data-shape="rectangle" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-rect"></canvas>Rectangle
+            <span class="shape-color-dot" style="background:#6c8fff"></span>
+          </button>
+          <button class="shape-btn" data-shape="diamond" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-diamond"></canvas>Diamond
+            <span class="shape-color-dot" style="background:#a78bfa"></span>
+          </button>
+          <button class="shape-btn" data-shape="ellipse" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-ellipse"></canvas>Ellipse
+            <span class="shape-color-dot" style="background:#6bcb77"></span>
+          </button>
+          <button class="shape-btn" data-shape="circle" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-circle"></canvas>Circle
+            <span class="shape-color-dot" style="background:#ffd93d"></span>
+          </button>
+          <button class="shape-btn" data-shape="arrow" draggable="true">
+            <canvas class="shape-icon-canvas" id="ic-arrow"></canvas>Arrow
+            <span class="shape-color-dot" style="background:#ff6b6b"></span>
+          </button>
+          <button class="shape-btn" data-shape="freehand" draggable="false">
+            <canvas class="shape-icon-canvas" id="ic-free"></canvas>Freehand ✏
+            <span class="shape-color-dot" style="background:#fb923c"></span>
+          </button>
+        </div>
+      </div>
+
       <!-- Snap Controls -->
       <div class="sidebar-section">
         <div class="section-label">Snap & Grid</div>
@@ -199,37 +230,6 @@
           <span class="slider-label">Line</span>
           <input type="range" class="slider-input" id="lineSlider" min="1" max="12" value="2"/>
           <span class="slider-val" id="lineVal">2px</span>
-        </div>
-      </div>
-
-      <!-- Shapes -->
-      <div class="sidebar-section" style="flex:1;overflow-y:auto">
-        <div class="section-label">Shape Library — drag ↓</div>
-        <div class="shape-list" id="shapeList">
-          <button class="shape-btn" data-shape="rectangle" draggable="true">
-            <canvas class="shape-icon-canvas" id="ic-rect"></canvas>Rectangle
-            <span class="shape-color-dot" style="background:#6c8fff"></span>
-          </button>
-          <button class="shape-btn" data-shape="diamond" draggable="true">
-            <canvas class="shape-icon-canvas" id="ic-diamond"></canvas>Diamond
-            <span class="shape-color-dot" style="background:#a78bfa"></span>
-          </button>
-          <button class="shape-btn" data-shape="ellipse" draggable="true">
-            <canvas class="shape-icon-canvas" id="ic-ellipse"></canvas>Ellipse
-            <span class="shape-color-dot" style="background:#6bcb77"></span>
-          </button>
-          <button class="shape-btn" data-shape="circle" draggable="true">
-            <canvas class="shape-icon-canvas" id="ic-circle"></canvas>Circle
-            <span class="shape-color-dot" style="background:#ffd93d"></span>
-          </button>
-          <button class="shape-btn" data-shape="arrow" draggable="true">
-            <canvas class="shape-icon-canvas" id="ic-arrow"></canvas>Arrow
-            <span class="shape-color-dot" style="background:#ff6b6b"></span>
-          </button>
-          <button class="shape-btn" data-shape="freehand" draggable="false">
-            <canvas class="shape-icon-canvas" id="ic-free"></canvas>Freehand ✏
-            <span class="shape-color-dot" style="background:#fb923c"></span>
-          </button>
         </div>
       </div>
 
