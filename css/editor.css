@@ -8,9 +8,9 @@
   --canvas-bg: #0d0d16;
   --sidebar: #0f0f1a;
   --menu: #08080f;
-  --accent: #5b8aff;
-  --accent2: #9d6fff;
-  --accent3: #3dd9a4;
+  --accent: #22c55e;
+  --accent2: #16a34a;
+  --accent3: #86efac;
   --text: #d0d0e0;
   --text-dim: #5a5a72;
   --text-bright: #f0f0ff;
@@ -22,12 +22,12 @@
   --surface: #13131e;
   --surface2: #1a1a28;
   --surface3: #20202e;
-  --grid-col: rgba(91,138,255,0.07);
-  --grid-col-snap: rgba(91,138,255,0.25);
+  --grid-col: rgba(34,197,94,0.08);
+  --grid-col-snap: rgba(34,197,94,0.24);
   --shadow: 0 8px 32px rgba(0,0,0,0.6);
   --shadow-sm: 0 2px 12px rgba(0,0,0,0.4);
   --measure-col: #ffd93d;
-  --guide-line: rgba(91,138,255,0.5);
+  --guide-line: rgba(34,197,94,0.55);
   --replay-bg: rgba(8,8,15,0.92);
 }
 
@@ -36,9 +36,9 @@
   --canvas-bg: #ffffff;
   --sidebar: #e8eaf2;
   --menu: #dddff0;
-  --accent: #3a5fff;
-  --accent2: #7c4dff;
-  --accent3: #00b87a;
+  --accent: #16a34a;
+  --accent2: #22c55e;
+  --accent3: #86efac;
   --text: #1a1a2e;
   --text-dim: #7070a0;
   --text-bright: #0a0a1e;
@@ -50,13 +50,31 @@
   --surface: #ffffff;
   --surface2: #eceef8;
   --surface3: #e4e6f4;
-  --grid-col: rgba(58,95,255,0.06);
-  --grid-col-snap: rgba(58,95,255,0.18);
+  --grid-col: rgba(34,197,94,0.07);
+  --grid-col-snap: rgba(34,197,94,0.2);
   --shadow: 0 8px 32px rgba(100,100,180,0.15);
   --shadow-sm: 0 2px 12px rgba(100,100,180,0.1);
   --measure-col: #d97706;
-  --guide-line: rgba(58,95,255,0.4);
+  --guide-line: rgba(34,197,94,0.45);
   --replay-bg: rgba(240,241,248,0.94);
+}
+
+[data-accent="green"], body[data-accent="green"] {
+  --accent: #2ecc71;
+  --accent2: #16a34a;
+  --accent3: #86efac;
+  --grid-col: rgba(46,204,113,0.08);
+  --grid-col-snap: rgba(46,204,113,0.24);
+  --guide-line: rgba(46,204,113,0.55);
+}
+
+[data-accent="red"], body[data-accent="red"] {
+  --accent: #ef4444;
+  --accent2: #dc2626;
+  --accent3: #fca5a5;
+  --grid-col: rgba(239,68,68,0.08);
+  --grid-col-snap: rgba(239,68,68,0.24);
+  --guide-line: rgba(239,68,68,0.55);
 }
 
 /* ═══════════════════════════════════════
@@ -163,6 +181,12 @@ html, body {
   font-weight: 600;
   transition: all 0.15s;
   white-space: nowrap;
+}
+
+.accent-select {
+  padding: 5px 9px;
+  min-width: 86px;
+  outline: none;
 }
 .topbar-action-btn:hover {
   border-color: var(--accent);

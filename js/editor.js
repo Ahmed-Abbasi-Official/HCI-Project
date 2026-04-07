@@ -9,6 +9,7 @@
   const MODES = { IDLE:"IDLE", ADDING:"ADDING", MOVE:"MOVE", DELETE:"DELETE" };
   const SK = "polyline_editor_v4";
   const THEME_KEY = "polyline_editor_theme";
+  const ACCENT_KEY = "polyline_editor_accent";
   const MAX = 100, MAXSTACK = 60;
   const GRID = 20;
 
@@ -33,7 +34,8 @@
   let clipboard = null, notifyTmr = null;
   let mw = { x: 0, y: 0 };
   let dragShape = null;
-  let theme = "dark";
+  let theme = "light";
+  let accent = "green";
   let snapGrid = true, snapPt = false;
   let alignGuides = { h: null, v: null };
 
@@ -115,7 +117,7 @@
   //  THEME
   // ═══════════════════════════════════════
   function loadTheme() {
-    try { theme = localStorage.getItem(THEME_KEY) === "light" ? "light" : "dark"; } catch (_) { theme = "dark"; }
+    try { theme = localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light"; } catch (_) { theme = "light"; }
     applyTheme(false);
   }
 
@@ -132,6 +134,21 @@
     theme = theme === "dark" ? "light" : "dark";
     try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
     applyTheme(true);
+  }
+
+  function loadAccent() {
+    accent = "green";
+    applyAccent(false);
+  }
+
+  function applyAccent(showToast = true) {
+    accent = "green";
+    document.documentElement.dataset.accent = accent;
+    document.body.dataset.accent = accent;
+    const accentSelect = document.getElementById("accentSelect");
+    if (accentSelect) accentSelect.value = accent;
+    if (showToast) toast("Accent: " + accent);
+    render();
   }
 
   // ═══════════════════════════════════════
@@ -1046,6 +1063,7 @@
     const data = { polys: clone(polys), savedAt: new Date().toISOString(), v: "4" };
     localStorage.setItem(SK, JSON.stringify(data));
     try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
+    try { localStorage.setItem(ACCENT_KEY, accent); } catch (_) {}
     if (dl) {
       const b = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const a = document.createElement("a"); a.href = URL.createObjectURL(b);
@@ -1259,6 +1277,15 @@
     const themeBtn = document.getElementById("themeToggleBtn");
     if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
 
+    const accentSelect = document.getElementById("accentSelect");
+    if (accentSelect) {
+      accentSelect.addEventListener("change", () => {
+        accent = accentSelect.value;
+        try { localStorage.setItem(ACCENT_KEY, accent); } catch (_) {}
+        applyAccent(true);
+      });
+    }
+
     // Clear canvas
     const clearBtn = document.getElementById("clearCanvasBtn");
     if (clearBtn) clearBtn.addEventListener("click", () => {
@@ -1307,6 +1334,7 @@
   // ═══════════════════════════════════════
   window.onload = () => {
     loadTheme();
+    loadAccent();
     load();
     drawIcons();
     buildColors();
