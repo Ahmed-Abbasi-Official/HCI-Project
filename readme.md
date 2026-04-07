@@ -12,6 +12,8 @@ It is designed for fast sketching, clean shape placement, live distance feedback
 
 ![Light workspace](public/Screenshot%202026-04-01%20182138.png)
 
+![Workflow diagram](public/diagram-export-4-7-2026-7_12_01-PM.png)
+
 ## Highlights
 
 - Draw polylines with a live dotted preview line.
@@ -19,8 +21,11 @@ It is designed for fast sketching, clean shape placement, live distance feedback
 - Add ready-made shapes like rectangle, diamond, ellipse, circle, and arrow.
 - Draw freehand polylines with the pencil tool.
 - Move shapes and points directly on the canvas.
+- Drag empty grid space to pan the canvas view.
+- Pan the view with arrow keys when no shape is selected.
 - Preview the previous state of a shape with press, hold, and release.
 - Delete individual points, full shapes, or selected content.
+- Zoom smoothly with the mouse wheel while keeping the view stable.
 - Switch between dark and light themes.
 - Use keyboard shortcuts for faster editing.
 - Open an in-app guide for feature help.
@@ -69,8 +74,9 @@ Each shape can be added from the sidebar and styled with custom stroke color, si
 
 ### Sidebar
 
-- Shape library
+- Shape library (pinned at the top)
 - Stroke color picker
+- Snap and grid controls
 - Shape controls
 - Mode controls
 
@@ -103,8 +109,10 @@ Each shape can be added from the sidebar and styled with custom stroke color, si
 | `Ctrl+X` | Cut |
 | `Ctrl+D` | Duplicate |
 | `Delete` | Delete selection |
-| `Arrow Keys` | Nudge selection |
-| `Mouse Wheel` | Zoom |
+| `Arrow Keys` | Nudge selected shape, or pan view when nothing is selected |
+| `Shift + Arrow Keys` | Larger step nudge/pan |
+| `Mouse Wheel` | Zoom in/out (stable centered zoom) |
+| `Drag Empty Grid` | Pan view with mouse |
 
 ## Project Structure
 
